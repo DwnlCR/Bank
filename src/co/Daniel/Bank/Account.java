@@ -15,11 +15,14 @@ public class Account {
         logger = new Log();
     }
 
+    public String getAccountNumber(){
+        return account;
+    }
+
     public void setName(String name) {
-        if (!name.matches("[\\p{L} ]+")) { // aceita só letras e espaços
+        if (!name.matches("[\\p{L} ]+")) {
             throw new IllegalArgumentException("O nome deve conter apenas letras e espaços.");
         }
-
         if (name.length() > MAX_LENGTH) {
             this.name = name.substring(0, MAX_LENGTH);
         } else {
@@ -27,32 +30,29 @@ public class Account {
         }
     }
 
-
-    public boolean withDraw(double value){
-        boolean result = true;
-        if(balance < value){
+    public boolean withDraw(double value) {
+        if (value <= 0) {
+            System.out.println("Valor invalido");
+            return false;
+        } else if (balance < value) {
             logger.out("SAQUE - R$" + value + " - Saldo insuficiente, sua conta atualmente possui R$" + balance);
-            result = false;
-        }
-        else if(balance >= value && value > 0){
+            return false;
+        } else {
             balance -= value;
             logger.out("SAQUE - R$" + value + " - Seu saldo atual é de R$" + balance);
             logger.out("Saque realizado com sucesso!");
+            return true;
         }
-        else{
-            System.out.println("Erro: Valor invalido! ");
-        }
-        return result;
     }
 
     public void deposit(double value){
-        if (value > 0) {
+        if (value < 0) {
+            System.out.println("Erro: Valor invalido! ");
+        }
+        else{
             balance += value;
             logger.out("DEPOSITO - R$" + value + " - Seu saldo atual é de R$" + balance);
             logger.out("Deposito realizado com sucesso!");
-        }
-        else{
-            System.out.println("Erro: Valor invalido! ");
         }
     }
 

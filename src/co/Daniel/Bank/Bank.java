@@ -25,4 +25,10 @@ public class Bank {
         lastAccount++;
         return account;
     }
+    public Account findAccount(String accountNumber){
+        for (Account account : accounts){
+            if(account.getAccountNumber().equals(accountNumber)) return account;
+        }
+        return null;
+    }
 }
