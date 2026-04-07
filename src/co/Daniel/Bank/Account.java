@@ -1,5 +1,9 @@
 package co.Daniel.Bank;
 
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Formatter;
+
 public class Account {
     private String name;
     private String agency;
@@ -56,6 +60,7 @@ public class Account {
             balance -= value;
             logger.out("SAQUE - R$" + value + " - Seu saldo atual é de R$" + balance);
             logger.out("Saque realizado com sucesso!");
+            logger.outDateTime();
             return true;
         }
     }
@@ -68,6 +73,7 @@ public class Account {
             balance += value;
             logger.out("DEPOSITO - R$" + value + " - Seu saldo atual é de R$" + balance);
             logger.out("Deposito realizado com sucesso!");
+            logger.outDateTime();
         }
     }
 
