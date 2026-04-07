@@ -4,19 +4,25 @@ public class Account {
     private String name;
     private String agency;
     private String account;
+    private int password;
     private double balance;
     private static final int MAX_LENGTH = 12;
     private Log logger;
 
-    public Account(String agency, String account, String name){
+    public Account(String agency, String account, String name, int password){
         this.agency = agency;
         this.account = account;
         setName(name);
+        setPassword(password);
         logger = new Log();
     }
 
     public String getAccountNumber(){
         return account;
+    }
+
+    public int getPassword(){
+        return password;
     }
 
     public void setName(String name) {
@@ -27,6 +33,15 @@ public class Account {
             this.name = name.substring(0, MAX_LENGTH);
         } else {
             this.name = name;
+        }
+    }
+
+    public void setPassword(int password){
+        if(password > 999999 || password < 100000){
+            throw new IllegalArgumentException("A senha deve conter 6 digitos");
+        }
+        else {
+            this.password = password;
         }
     }
 

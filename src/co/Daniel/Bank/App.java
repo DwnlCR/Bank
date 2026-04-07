@@ -14,8 +14,11 @@ public class App {
                 while(true) {
                     System.out.println("Digite seu nome: ");
                     String name = scanner.nextLine();
+                    System.out.println("Digite a senha de 6 digitos: ");
+                    String stringPassword = scanner.nextLine();
+                    int password = Integer.parseInt(stringPassword.trim().replaceAll("[^0-9]", ""));
                     try {
-                        Account account = santander.generateAccount(name);
+                        Account account = santander.generateAccount(name, password);
                         santander.insertAccount(account);
                         System.out.println("Conta criada com sucesso!");
                         account.setName(name);
@@ -23,13 +26,16 @@ public class App {
                         operateAccount(account);
                         break;
                     } catch (IllegalArgumentException e) {
-                        System.out.println("Nome inválido! Digite apenas letras e espaços.");
+                        System.out.println("Nome ou Senha inválidos, digite apenas letras e espaços para o nome e uma senha de 6 digitos.");
                     }
                 }
             } else if (op.equalsIgnoreCase("E")) {
                 System.out.println("Digite o numero da sua conta: ");
                 String accountNumber = scanner.nextLine().trim();
-                Account account = santander.findAccount(accountNumber);
+                System.out.println("Digite sua senha de 6 digitos: ");
+                String stringPassword = scanner.nextLine();
+                int password = Integer.parseInt(stringPassword.trim().replaceAll("[^0-9]", ""));
+                Account account = santander.findAccount(accountNumber, password);
 
                 if (account == null){
                     System.out.println("Conta não encontrada. Verifique o numero e tente novamente");
@@ -50,7 +56,7 @@ public class App {
     static void operateAccount(Account account){
         Scanner scanner = new Scanner(System.in);
         while(true){
-            System.out.println("Qual operacao deseja fazer: Depositar - D | " + "Sacar - S | " + "Sair - E | " + "Ver Saldo - V");
+            System.out.println("Qual operacao deseja fazer: Depositar - D | " + "Sacar - S | " + "Ver Saldo - V | " + "Sair - E ");
             String op = scanner.nextLine();
             if (op.equalsIgnoreCase("D")){
                 while (true) {
@@ -72,7 +78,7 @@ public class App {
                     String entrada = scanner.nextLine();
                     try {
                         double val = Double.parseDouble(entrada.replace(",", "."));
-                        val = Math.round((val * 100.0) / 100.0);
+                        val = Math.round(val * 100.0) / 100.0;
                         account.withDraw(val);
                         break;
                     }
@@ -93,7 +99,6 @@ public class App {
             else {
                 System.out.println("Operacao invalida");
             }
-            scanner = new Scanner(System.in);
         }
     }
 }

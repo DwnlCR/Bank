@@ -20,14 +20,14 @@ public class Bank {
     public void insertAccount(Account account){
         accounts.add(account);
     }
-    public Account generateAccount(String name){
-        Account account = new Account(agency, "" + lastAccount , name);
+    public Account generateAccount(String name, int password){
+        Account account = new Account(agency, "" + lastAccount , name, password);
         lastAccount++;
         return account;
     }
-    public Account findAccount(String accountNumber){
+    public Account findAccount(String accountNumber, int password){
         for (Account account : accounts){
-            if(account.getAccountNumber().equals(accountNumber)) return account;
+            if(account.getAccountNumber().equals(accountNumber) && account.getPassword() == password) return account;
         }
         return null;
     }
