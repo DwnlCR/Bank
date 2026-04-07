@@ -79,7 +79,7 @@ Representa uma conta bancária individual.
 - Senha deve conter exatamente 6 dígitos numéricos (100000–999999)
 - Depósitos e saques com valor `<= 0` são rejeitados
 - Saque com saldo insuficiente é bloqueado e logado
-- Entrada de valores aceita vírgula ou ponto como separador decimal (ex: `1,50` → `1.50`)
+- Depósitos e saques bem-sucedidos registram data e hora via `logger.outDateTime()`
 
 ---
 
@@ -87,9 +87,15 @@ Representa uma conta bancária individual.
 
 Utilitário simples de log. Registra mensagens de operações no console com o prefixo `LOG:`.
 
+| Método | Descrição |
+|---|---|
+| `out(message)` | Imprime uma mensagem de log com prefixo `LOG:` |
+| `outDateTime()` | Imprime a data e hora da operação no formato `dd/MM/yyyy - HH:mm:ss` |
+
 ```
 LOG: SAQUE - R$50.0 - Seu saldo atual é de R$150.0
 LOG: Saque realizado com sucesso!
+Operação realizada em: 07/04/2026 - 14:32:10
 ```
 
 ---
@@ -108,6 +114,8 @@ LOG: Saque realizado com sucesso!
 | 8 | `App.java` | Opção Ver Saldo inexistente | Adicionada opção `V` que exibe `account.toString()` |
 | 9 | `Account.java` | Sem autenticação por senha | Adicionados campo `password`, `setPassword()` com validação e `getPassword()` |
 | 10 | `App.java` | `Integer.parseInt()` quebrava ao receber caracteres não numéricos na senha | Adicionado `replaceAll("[^0-9]", "")` para sanitizar a entrada antes do parse |
+| 11 | `Log.java` | Log não registrava data/hora das operações | Adicionado `outDateTime()` com `OffsetDateTime` e `DateTimeFormatter` |
+| 12 | `Account.java` | Depósito e saque não informavam quando foram realizados | Adicionada chamada a `logger.outDateTime()` após operações bem-sucedidas |
 
 ---
 
