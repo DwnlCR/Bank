@@ -44,6 +44,7 @@ public class Account {
 
     public boolean checkPassword(int password) {
         return hash(String.valueOf(password)).equals(this.passwordHash);
+
     }
 
     public boolean withDraw(BigDecimal value) {
