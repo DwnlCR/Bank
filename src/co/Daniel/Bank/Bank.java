@@ -27,7 +27,7 @@ public class Bank {
     }
     public Account findAccount(String accountNumber, int password){
         for (Account account : accounts){
-            if(account.getAccountNumber().equals(accountNumber) && account.getPassword() == password) return account;
+            if(account.getAccountNumber().equals(accountNumber) && account.checkPassword(password)) return account;
         }
         return null;
     }

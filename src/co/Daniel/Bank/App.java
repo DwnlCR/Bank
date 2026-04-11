@@ -1,5 +1,7 @@
 package co.Daniel.Bank;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Scanner;
 
 public class App {
@@ -34,15 +36,18 @@ public class App {
                 String accountNumber = scanner.nextLine().trim();
                 System.out.println("Digite sua senha de 6 digitos: ");
                 String stringPassword = scanner.nextLine();
-                int password = Integer.parseInt(stringPassword.trim().replaceAll("[^0-9]", ""));
-                Account account = santander.findAccount(accountNumber, password);
-
-                if (account == null){
-                    System.out.println("Conta não encontrada. Verifique o numero e tente novamente");
-                }
-                else {
-                    System.out.println("Bem vindo, " + account);
-                    operateAccount(account);
+                try {
+                    int password = Integer.parseInt(stringPassword.trim().replaceAll("[^0-9]", ""));
+                    Account account = santander.findAccount(accountNumber, password);
+                    if (account == null){
+                        System.out.println("Conta não encontrada. Verifique o numero e tente novamente");
+                    }
+                    else {
+                        System.out.println("Bem vindo, " + account);
+                        operateAccount(account);
+                    }
+                }catch (NumberFormatException ex){
+                    System.out.println("Senha invalida, digite apenas 6 numeros");
                 }
             } else if (op.equalsIgnoreCase("S")) {
                 System.out.println("Saindo do sistema...");
@@ -63,8 +68,7 @@ public class App {
                     System.out.println("Qual valor deseja depositar: ");
                     String entrada = scanner.nextLine();
                     try{
-                        double val = Double.parseDouble(entrada.replace(",", "."));
-                        val = Math.round(val*100.0)/100.0;
+                        BigDecimal val = new BigDecimal(entrada.replace(",", ".")).setScale(2, RoundingMode.HALF_UP);
                         account.deposit(val);
                         break;
                     } catch (NumberFormatException e) {
@@ -77,8 +81,7 @@ public class App {
                     System.out.println("Qual valor deseja Sacar: ");
                     String entrada = scanner.nextLine();
                     try {
-                        double val = Double.parseDouble(entrada.replace(",", "."));
-                        val = Math.round(val * 100.0) / 100.0;
+                        BigDecimal val = new BigDecimal(entrada.replace(",", ".")).setScale(2, RoundingMode.HALF_UP);
                         account.withDraw(val);
                         break;
                     }
