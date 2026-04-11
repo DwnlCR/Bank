@@ -14,7 +14,7 @@ public class Account {
     private static final int MAX_LENGTH = 12;
     private Log logger;
 
-    public Account(String agency, String account, String name, int password){
+    public Account(String agency, String account, String name, int password) {
         this.agency = agency;
         this.account = account;
         setName(name);
@@ -22,14 +22,13 @@ public class Account {
         logger = new Log();
     }
 
-    public String getAccountNumber(){
+    public String getAccountNumber() {
         return account;
     }
 
     public void setName(String name) {
-        if (!name.matches("[\\p{L} ]+")) {
+        if (!name.matches("[\\p{L} ]+"))
             throw new IllegalArgumentException("O nome deve conter apenas letras e espaços.");
-        }
         if (name.length() > MAX_LENGTH) {
             this.name = name.substring(0, MAX_LENGTH);
         } else {
@@ -38,11 +37,12 @@ public class Account {
     }
 
     public void setPassword(int password) {
-        if (password > 999999 || password < 100000) throw new IllegalArgumentException("A senha deve conter 6 digitos");
+        if (password > 999999 || password < 100000)
+            throw new IllegalArgumentException("A senha deve conter 6 digitos");
         this.passwordHash = hash(String.valueOf(password));
     }
 
-    public boolean checkPassword(int password){
+    public boolean checkPassword(int password) {
         return hash(String.valueOf(password)).equals(this.passwordHash);
     }
 
@@ -62,15 +62,26 @@ public class Account {
         }
     }
 
-    public void deposit(BigDecimal value){
+    public void deposit(BigDecimal value) {
         if (value.compareTo(BigDecimal.ZERO) <= 0) {
             System.out.println("Erro: Valor invalido! ");
-        }
-        else{
+        } else {
             balance = balance.add(value).setScale(2, RoundingMode.HALF_UP);
             logger.out("DEPOSITO - R$" + value + " - Seu saldo atual é de R$" + balance);
             logger.out("Deposito realizado com sucesso!");
             logger.outDateTime();
+        }
+    }
+
+    private String hash(String password) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            byte[] bytes = messageDigest.digest(password.getBytes());
+            StringBuilder content = new StringBuilder();
+            for (var b : bytes) content.append(String.format("%02x", b));
+            return content.toString();
+        } catch (NoSuchAlgorithmException ex) {
+            throw new RuntimeException("SHA-256 indisponivel para uso", ex);
         }
     }
 
@@ -79,17 +90,4 @@ public class Account {
         String result = "A conta " + this.name + " Agencia " + this.agency + " / " + this.account + " possui: R$" + balance;
         return result;
     }
-
-    private String hash(String password){
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-            byte [] bytes = messageDigest.digest(password.getBytes());
-            StringBuilder content = new StringBuilder();
-            for(var b : bytes) content.append(String.format("%2x", b));
-            return content.toString();
-        }catch (NoSuchAlgorithmException ex){
-            throw new RuntimeException("SHA-indisponivel para uso", ex);
-        }
-    }
 }
-
